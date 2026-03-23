@@ -128,5 +128,23 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/products/search")
+    public ResponseEntity<ApiResponse<List<Product>>> searchProducts(
+            @RequestParam String keyword) {
+
+            List<Product> products = productService.searchProducts(keyword);
+        if (products != null) {
+            return new ResponseEntity<>(
+                    new ApiResponse<>(true, "Product fetched successfully", products),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    new ApiResponse<>(false, "Product not found"),
+                    HttpStatus.NOT_FOUND
+            );
+        }
+    }
+
 
 }

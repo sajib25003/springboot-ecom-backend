@@ -64,4 +64,8 @@ public class ProductService {
 
         productRepo.delete(existing);
     }
+
+    public List<Product> searchProducts(String keyword) {
+        return productRepo.searchProducts(keyword);
+    }
 }
