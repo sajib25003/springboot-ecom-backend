@@ -16,7 +16,7 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepo repo;  // corrected repository name
+    private UserRepo repo;
 
     @Override
     public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),  // use email here
+                user.getEmail(),
                 user.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))  // prefix ROLE_ for Spring Security
         );

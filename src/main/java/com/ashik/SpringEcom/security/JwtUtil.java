@@ -37,4 +37,14 @@ public class JwtUtil {
 
         return claims.getSubject();
     }
+
+    public long getExpiryFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)  // same key used to generate JWT
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getExpiration().getTime();
+    }
 }
