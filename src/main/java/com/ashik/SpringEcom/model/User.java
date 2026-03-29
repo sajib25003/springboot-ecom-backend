@@ -1,7 +1,6 @@
 package com.ashik.SpringEcom.model;
 
 import com.ashik.SpringEcom.model.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
