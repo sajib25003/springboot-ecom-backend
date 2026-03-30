@@ -113,8 +113,9 @@ public class AuthController {
             return ResponseEntity.ok(new ApiResponse<>(true, "Login successful", responseData));
 
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(401)
-                    .body(new ApiResponse<>(false, "Invalid credentials", null));
+                    .body(new ApiResponse<>(false, "Invalid credentials: " + e.getMessage(), null));
         }
     }
 

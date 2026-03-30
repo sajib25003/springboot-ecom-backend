@@ -3,6 +3,9 @@ package com.ashik.SpringEcom.service;
 import com.ashik.SpringEcom.model.Product;
 import com.ashik.SpringEcom.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,8 +18,9 @@ public class ProductService {
     @Autowired
     private ProductRepo productRepo;
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    public Page<Product> getAllProducts(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return productRepo.findAll(pageable);
     }
 
     public Product getProductById(int id) {

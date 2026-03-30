@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -78,4 +79,18 @@ public class JwtUtil {
                 .compact();
     }
 
+    public boolean isTokenExpired(String token) {
+        final Date expiration = Jwts.parser()
+                .verifyWith((SecretKey) key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+        return expiration.before(new Date());
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractEmail(token);  // JWT থেকে subject/email বের করা
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
 }

@@ -4,6 +4,7 @@ import com.ashik.SpringEcom.model.ApiResponse;
 import com.ashik.SpringEcom.model.Product;
 import com.ashik.SpringEcom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -27,11 +30,21 @@ public class ProductController {
 //    }
 
     @GetMapping("/products")
-    public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<ApiResponse<Object>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Page<Product> productPage = (Page) productService.getAllProducts(page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productPage.getContent());
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", productPage.getTotalPages());
 
         return ResponseEntity.ok(
-                new ApiResponse<>(true, "Products fetched successfully", products)
+                new ApiResponse<>(true, "Products fetched successfully", response)
         );
     }
 
