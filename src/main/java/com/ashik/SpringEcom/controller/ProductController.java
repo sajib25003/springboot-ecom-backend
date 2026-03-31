@@ -31,11 +31,13 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<ApiResponse<Object>> getAllProducts(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        Page<Product> productPage = (Page) productService.getAllProducts(page, size);
+        page = Math.max(page - 1, 0); // convert to zero-based
+//        Page<Product> productPage = (Page) productService.getAllProducts(page, size);
+        Page<Product> productPage = productService.getAllProducts(page, size);
 
         Map<String, Object> response = new HashMap<>();
         response.put("products", productPage.getContent());
@@ -145,7 +147,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<List<Product>>> searchProducts(
             @RequestParam String keyword) {
 
-            List<Product> products = productService.searchProducts(keyword);
+        List<Product> products = productService.searchProducts(keyword);
         if (products != null) {
             return new ResponseEntity<>(
                     new ApiResponse<>(true, "Product fetched successfully", products),
